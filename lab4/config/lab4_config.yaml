@@ -1,0 +1,20 @@
+base_height: 0.138
+rotating_link_height: 0.050
+rear_arm_length: 0.135
+forearm_length: 0.147
+tool_length: 0.060
+
+j1_min: -1.5708
+j1_max: 1.5708
+
+j2_min: 0.0
+j2_max: 1.4835
+
+j3_min: -0.1745
+j3_max: 1.5708
+
+j4_min: -1.5708
+j4_max: 1.5708
+
+j5_min: -1.5708
+j5_max: 1.5708

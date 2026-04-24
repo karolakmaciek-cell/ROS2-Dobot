@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dobot_magician">
+
+  <xacro:property name="yaml_file" value="$(find lab4)/config/lab4_config.yaml" />
+  <xacro:property name="params" value="${xacro.load_yaml(yaml_file)}" />
+
+  <material name="white"> <color rgba="1 1 1 1"/> </material>
+  <material name="dark_grey"> <color rgba="0.3 0.3 0.3 1"/> </material>
+  <material name="grey"> <color rgba="0.6 0.6 0.6 1"/> </material>
+  <material name="red"> <color rgba="1 0 0 1"/> </material>
+  <material name="blue"> <color rgba="0 0 1 1"/> </material>
+  <material name="yellow"> <color rgba="1 0.8 0 1"/> </material>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.16 0.16 ${params['base_height']}"/>
+      </geometry>
+      <origin xyz="0 0 ${params['base_height']/2}" rpy="0 0 0"/>
+      <material name="dark_grey"/>
+    </visual>
+    <visual>
+      <geometry>
+        <box size="0.02 0.08 0.02"/>
+      </geometry>
+      <origin xyz="0.08 0 ${params['base_height'] + 0.01}" rpy="0 0 0"/>
+      <material name="red"/>
+    </visual>
+  </link>
+
+  <link name="link1">
+    <visual>
+      <geometry>
+        <cylinder radius="0.06" length="${params['rotating_link_height']}"/>
+      </geometry>
+      <origin xyz="0 0 ${params['rotating_link_height']/2}" rpy="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 ${params['base_height']}" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/> 
+    <limit lower="${params['j1_min']}" upper="${params['j1_max']}" effort="100" velocity="1.0"/>
+  </joint>
+
+  <link name="link2">
+    <visual>
+      <geometry>
+        <cylinder radius="0.04" length="${params['rear_arm_length']}"/>
+      </geometry>
+      <origin xyz="0 0 ${params['rear_arm_length']/2}" rpy="0 0 0"/>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="0 0 ${params['rotating_link_height']}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${params['j2_min']}" upper="${params['j2_max']}" effort="100" velocity="1.0"/>
+  </joint>
+
+  <link name="link3">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="${params['forearm_length']}"/>
+      </geometry>
+      <origin xyz="0 0 ${params['forearm_length']/2}" rpy="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="joint3" type="revolute">
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin xyz="0 0 ${params['rear_arm_length']}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${params['j3_min']}" upper="${params['j3_max']}" effort="100" velocity="1.0"/>
+  </joint>
+
+  <link name="link4">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="0.04"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="joint4" type="revolute">
+    <parent link="link3"/>
+    <child link="link4"/>
+    <origin xyz="0 0 ${params['forearm_length']}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${params['j4_min']}" upper="${params['j4_max']}" effort="100" velocity="1.0"/>
+  </joint>
+
+  <joint name="joint5" type="revolute">
+    <parent link="link4"/>
+    <child link="tool_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${params['j5_min']}" upper="${params['j5_max']}" effort="100" velocity="1.0"/>
+  </joint>
+
+<link name="tool_link">
+    <visual>
+      <geometry>
+        <box size="0.02 0.04 0.02"/>
+      </geometry>
+      <origin xyz="0.02 0.02 0.01" rpy="0 0 0"/>
+      <material name="yellow"/>
+    </visual>
+    <visual>
+      <geometry>
+        <box size="0.03 0.03 ${params['tool_length']}"/>
+      </geometry>
+      <origin xyz="0 0 ${params['tool_length']/2}" rpy="0 0 0"/>
+      <material name="blue"/>
+    </visual>
+  </link>
+
+</robot>
